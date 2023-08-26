@@ -1,69 +1,44 @@
-def turned(key):
-    turned_key = []
-    length = len(key)
-    
-    for i in range(0, length, 1):
-        temp = []
-        for j in range(length-1, -1, -1):
-            temp.append(key[j][i])
-        turned_key.append(temp)
-    return turned_key
+def rotate_a_matrix_by_90_degree(a):
+    n = len(a)
+    m = len(a[0])
+    result = [[0] * n for _ in range(m)]
+    for i in range(n):
+        for j in range(m):
+            result[j][n-i-1] = a[i][j]
+    return result
+
+def check(new_lock):
+    lock_length = len(new_lock) // 3
+    for i in range(lock_length, lock_length * 2):
+        for j in range(lock_length, lock_length * 2):
+            if new_lock[i][j] != 1:
+                return False
+    return True
 
 def solution(key, lock):
-    m = len(key)
     n = len(lock)
-    hom = sum([i.count(0) for i in lock if i.count(0)])
-    dol = sum([i.count(1) for i in lock if i.count(1)])
-    if dol == m*m:
-        return True
+    m = len(key)
+
+    new_lock = [[0] * (n * 3) for _ in range(n * 3)]
     
-    if len(lock) < n + (m*2) - 2:
-        big_lock = []
-        line_plus = (((m-1)*2 + m) - n) // 2
-        upper = [(n + (m*2) - 2) * [2] for i in range(line_plus)]
-        lower = [(n + (m*2) - 2) * [2] for i in range(line_plus)]
-        mid_l = line_plus * [2]
-        mid_r = line_plus * [2]
-        
-        for e in lock:
-            big_lock.append(mid_l+e+mid_r)
-        
-        lock = upper + big_lock + lower
-        print(lock)
-
-    for i in range(len(lock)):
-        temp = []
-        if i + m > len(lock):
-            break
-        for j in range(i ,i+m):
-            temp.append(lock[j])
-
-        for k in range(len(lock)-m+1):
-            temp_2 = []
-            for arr in temp:
-                temp_2.append(arr[k:k+m])
-
-            turn = 0
-            match = 0
-            dismatch = 0
-
-            while turn < 4:
-                for a in range(m):
-                    for b in range(m):
-                        if key[a][b] == 1 and temp_2[a][b] == 0:
-                            match += 1
-                        elif key[a][b] == 1 and temp_2[a][b] == 1:
-                            dismatch += 1
-                
-                if match == hom and dismatch == 0:
+    for i in range(n):
+        for j in range(n):
+            new_lock[i+n][j+n] = lock[i][j]
+    
+    for rotation in range(4):
+        key = rotate_a_matrix_by_90_degree(key)
+        for x in range(n * 2):
+            for y in range(n * 2):
+                for i in range(m):
+                    for j in range(m):
+                        new_lock[x + i][y + j] += key[i][j]
+                        
+                if check(new_lock) == True:
                     return True
-
-                key = turned(key)
-                match = 0
-                dismatch = 0
-                turn += 1
-            
+                
+                for i in range(m):
+                    for j in range(m):
+                        new_lock[x + i][y + j] -= key[i][j]
     return False
 
-print(solution([[0, 0, 0], [1, 0, 0], [0, 1, 1]], [[1, 1, 1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1 ,1 ,1], [1, 1, 1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 1, 1], [1, 1, 0, 1, 1, 1, 1, 1, 1], [1, 1, 1, 0, 0, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 1, 1]]))
-print(solution([[0, 1], [0, 0]], [[1, 1], [0, 1]]))
+print(solution([[0, 0, 0], [1, 0, 0], [0, 1, 1]], [[1, 1, 1], [1, 1, 0], [1, 0, 1]]))
