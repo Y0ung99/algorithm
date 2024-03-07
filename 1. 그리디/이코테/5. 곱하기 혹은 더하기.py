@@ -29,20 +29,35 @@
 
 #3 책풀이
 '''
-첫번째문자를 대입하면 편하다.
-조건문은 간단히
-'''
-data = input()
+# 첫번째문자를 대입하면 편하다.
+# 조건문은 간단히
+# '''
+# data = input()
 
-#첫 번째 문자를 숫자로 변경하여 대입
-result = int(data[0])
+# #첫 번째 문자를 숫자로 변경하여 대입
+# result = int(data[0])
 
-for i in range(1, len(data)):
-    # 두 수 중에서 하나라도 '0' 혹은 '1'인경우 더하기 수행
-    num = int(data[i])
-    if num <= 1 or result <= 1:
-        result += num
+# for i in range(1, len(data)):
+#     # 두 수 중에서 하나라도 '0' 혹은 '1'인경우 더하기 수행
+#     num = int(data[i])
+#     if num <= 1 or result <= 1:
+#         result += num
+#     else:
+#         result *= num
+
+# print(result)
+
+s = list(map(int ,list(input())))
+s.sort(reverse=True)
+sum = 0
+
+for i, n in enumerate(s):
+    if 1 >= n:
+        sum += n
+    elif sum == 0 and 1 < n:
+        sum += 1
+        sum *= n
     else:
-        result *= num
+        sum *= n
 
-print(result)
+print(sum)

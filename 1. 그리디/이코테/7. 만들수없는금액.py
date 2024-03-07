@@ -22,15 +22,27 @@
 #1은 애초에 그리디가 아님.
 그리디 -> 현재 상태에서 매번 가장 좋아 보이는 것만을 선택하는 알고리즘
 '''
+# n = int(input())
+# data = list(map(int, input().split))
+# data.sort()
+
+# target = 1
+# for x in data:
+#     #만들 수 없는 금액을 찾았을 때 반복 종료
+#     if target < x:
+#         break
+#     target += x
+
+# print(target)
+
 n = int(input())
-data = list(map(int, input().split))
-data.sort()
+arr = list(map(int, input().split()))
+arr.sort()
 
 target = 1
-for x in data:
-    #만들 수 없는 금액을 찾았을 때 반복 종료
+for x in arr:
     if target < x:
         break
     target += x
-
+    print(target)
 print(target)
