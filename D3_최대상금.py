@@ -2,12 +2,6 @@ from itertools import permutations
 
 T = int(input())
 
-def change(numbers, a, b):
-    temp = numbers[a]
-    numbers[a] = numbers[b]
-    numbers[b] = temp
-    return numbers
-
 def calc(numbers):
     x = 1
     result = 0
@@ -23,18 +17,16 @@ def box(numbers, per, v, ex):
         temp = []
         for n in numbers:
             for p in per:
-                temp.append(change(n[:], p[0], p[1]))
-        return box(temp[:], per, v+1, ex)
-    
+                n = list(n)
+                t = n[:]
+                t[p[0]], t[p[1]] = t[p[1]], t[p[0]]
+                temp.append(t[:])
+        return box(list(set(tuple(item) for item in temp)), per, v+1, ex)
 
 for test_case in range(1, T + 1):
     numbers, ex = input().split()
-    numbers = [list(map(int, numbers))]
+    numbers = [tuple(map(int, numbers))]
     ex = int(ex)
     per = list(permutations(range(len(numbers[0])), 2))
-    res_arr = box(numbers[:], per, 0, ex)
-
+    res_arr = list(set(tuple(item) for item in box(numbers[:], per, 0, ex)))
     print(f"#{test_case} {calc(sorted(res_arr, reverse=True)[0])}")
-'''
-메모리 초과 오류 나중에 다시
-'''
