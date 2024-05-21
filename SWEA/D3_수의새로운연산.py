@@ -4,10 +4,10 @@ arr[0][0] = 1
 i = 1
 mark = 2
 while i < 300:
-    for _i in range(i, -1, -1):
-        for _j in range(0, i + 1):
-            if _i + _j == i:
-                arr[_i][_j] = mark
+    for _i in range(i, -1, -1): # 1 # 2
+        for _j in range(0, i + 1): # 0 # 1 # 0
+            if _i + _j == i: # 1 0 == 1 # 1 1 != 1
+                arr[_i][_j] = mark # [1][0] = 2 # [2][0] = 3
                 mark += 1
     i += 1
 

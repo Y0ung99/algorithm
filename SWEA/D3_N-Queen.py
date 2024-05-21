@@ -7,8 +7,10 @@ def attack(x):
     return True
 
 def dfs(start):
+    print(row)
     global cnt
     if start == n:
+        print('fin', row)
         cnt += 1
     else:
         for i in range(n):
