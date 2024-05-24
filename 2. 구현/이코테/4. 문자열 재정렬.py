@@ -1,18 +1,11 @@
-def is_num(c):
-    try:
-        float(c)
-        return True
-    except ValueError:
-        return False
-    
-s = input()
-strs = []
-nums = 0
-
-for c in s:
-    if is_num(c):
-        nums += int(c)
+s = list(input())
+s.sort()
+m = 0
+for _s in s:
+    if _s.isdigit():
+        m += 1
     else:
-        strs.append(c)
-
-print(''.join(sorted(strs)) + str(nums))
+        break
+right = str(sum(list(map(int, list(s[:m])))))
+left = ''.join(s[m:])
+print(left + right)

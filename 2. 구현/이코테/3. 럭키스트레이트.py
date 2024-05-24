@@ -1,9 +1,3 @@
-n = input()
-mid = (len(n) / 2)
-sum1 = sum([int(v) for i, v in enumerate(n) if i < mid])
-sum2 = sum([int(v) for i, v in enumerate(n) if i >= mid])
-
-if sum1 == sum2:
-    print('LUCKY')
-else:
-    print('READY')
+s = list(map(int, list(input())))
+m = len(s) // 2
+print('LUCKY') if sum(s[:m]) == sum(s[m:]) else print('READY')

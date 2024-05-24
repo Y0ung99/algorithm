@@ -1,39 +1,28 @@
-def solution(s):
-    minimum = 1001
-    
-    if len(s) == 1:
-        return 1
-
-    for i in range(1, len(s), 1):
-        arr = []
-        strs = ''
-        for j in range(0, len(s), i):
-            if j+i > len(s):
-                tail = []
-                for k in range(j, len(s)):
-                    tail.append(s[k])
-                arr.append(''.join(tail))
-                break
-            arr.append(s[j:j+i])
-            
-        pos = 0
-        same = 1
-        while pos < len(arr) - 1:
-            if arr[pos] == arr[pos+1]:
-                same += 1
+def solution(string):
+    s_arr = list(string)
+    result = len(string)
+    for i in range(1, len(s_arr)):
+        splited = []
+        for j in range(0, len(s_arr), i):
+            splited.append(s_arr[j:j+i])
+        t_result = ''
+        for k in range(len(splited)):
+            check = 1
+            for l in range(k+1, len(splited)):
+                if splited[k] == splited[l]:
+                    check += 1
+                else:
+                    break
+            if 1 < check:
+                if len(t_result) == 0:
+                    t_result += str(check)
+                    continue
+                if t_result[-1].isdigit():
+                    continue
+                else:
+                    t_result += str(check)
             else:
-                if same > 1:
-                    strs += str(same) + arr[pos]
-                else:
-                    strs += arr[pos]
-                same = 1
-            pos += 1
-            if pos == len(arr) - 1:
-                if same > 1:
-                    strs += str(same) + arr[pos]
-                else:
-                    strs += arr[pos]
-                same = 1
-        minimum = min(len(strs), minimum)
-        
-    return minimum
+                t_result += ''.join(splited[k])
+        result = min(result, len(t_result))
+    return result
+print(solution('abcabcabcabcdededededede'))

@@ -1,92 +1,55 @@
-from collections import deque
+import collections
+def turn(s, cd):
+    if s == 'L':
+        return (cd - 1 + 4) % 4
+    else:
+        return (cd + 1 + 4) % 4
+
+dx = [0, 1, 0, -1]
+dy = [1, 0, -1, 0]
 
 n = int(input())
-board = [[0] * n for _ in range(n)]
-board[0][0] = 1
+a = int(input())
 
-k = int(input())
-for _ in range(k):
+board = [[0] * n for _ in range(n)]
+order = {}
+
+for _ in range(a):
     x, y = map(int, input().split())
-    board[x-1][y-1] = 2
+    board[x-1][y-1] = 5
 
 l = int(input())
-plan = {}
 for _ in range(l):
-    t, c = input().split()
-    plan[t] = c
+    x, y = input().split()
+    order[int(x)] = y
 
-time = 0
-
-head_pos = [0, 0]
-path = deque([[0, 0]])
-direction = 'E'
-
-def go(n, head_pos, direction):
-    if direction == 'E':
-        head_pos[1] += 1
-    elif direction == 'S':
-        head_pos[0] += 1
-    elif direction == 'W':
-        head_pos[1] -= 1
-    elif direction == 'N':
-        head_pos[0] -= 1
-    
-    if (0 <= head_pos[0] < n) and (0 <= head_pos[1] < n):
-        return head_pos
-    else:
-        raise Exception('n의 값을 초과했습니다.')
-    
-    
-
-def turn(direction, order):
-    sets = ['E', 'S', 'W', 'N']
-
-    if order == 'D':
-        for i, s in enumerate(sets):
-            if s == direction:
-                if 0 <= i <= 2:
-                    direction = sets[i+1]
-                else:
-                    direction = 'E'
-                break
-
-    elif order == 'L':
-        for i, s in enumerate(sets):
-            if s == direction:
-                if  1 <= i <= 3  :
-                    direction = sets[i-1]
-                else:
-                    direction = 'N'
-                break
-    return direction
-
+t = 1
+d = 0
+flag = 0
+h_x, h_y = 0, 0
+board[0][0] = 1
+t_q = collections.deque([(0, 0)])
 
 while True:
-    try:
-        time += 1
-        next = go(n, head_pos, direction)
-        head_x = next[0]
-        head_y = next[1]
-
-        if board[head_x][head_y] == 2:
-            board[head_x][head_y] = 1
-            path.append([head_x, head_y])
-            head_pos[0] = head_x
-            head_pos[1] = head_y
-        elif board[head_x][head_y] == 0:
-            board[head_x][head_y] = 1
-            head_pos[0] = head_x
-            head_pos[1] = head_y
-            path.append([head_x, head_y])
-            tail = path.popleft()
-            board[tail[0]][tail[1]] = 0
-        elif board[head_x][head_y] == 1:
+    h_x += dx[d]
+    h_y += dy[d]
+    if 0 <= h_x < n and 0 <= h_y < n:
+        if board[h_x][h_y] == 5:
+            board[h_x][h_y] = 1
+            t_q.append((h_x, h_y))
+        elif board[h_x][h_y] == 0:
+            t_x, t_y = t_q.popleft()
+            t_q.append((h_x, h_y))
+            board[t_x][t_y] = 0
+            board[h_x][h_y] = 1
+        elif board[h_x][h_y] == 1:
+            flag = 1
             break
-
-        if str(time) in list(plan.keys()):
-            direction = turn(direction, plan[str(time)])
-
-    except Exception:
+    else:
+        flag = 1
         break
-
-print(time)
+    if t in order.keys():
+        d = turn(order[t], d)
+    t += 1
+if flag:
+    print(t)

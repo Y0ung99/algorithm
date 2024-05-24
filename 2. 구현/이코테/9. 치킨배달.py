@@ -1,40 +1,26 @@
-from itertools import combinations
-
-def get_homes_stores(info, n):
-    homes = []
-    stores = []
-    for i in range(n):
-        for j in range(n):
-            if info[i][j] == 1:
-                homes.append([i, j])
-            elif info[i][j] == 2:
-                stores.append([i, j])
-    return homes, stores
-
-def calc_distance(home, store):
-    return abs(home[0]-store[0]) + abs(home[1]-store[1])
-
-def calc_chicken_distance(candidate):
-    chick_dis = 0
-    for home in homes:
-        temp_dis = 1e9
-        for store in canditate:
-            temp_dis = min(temp_dis, calc_distance(home, store))
-        chick_dis += temp_dis
-    return chick_dis
+import itertools
+def calc_distance(x1, y1, x2, y2):
+    return abs(x1 - x2) + abs(y1 - y2)
 
 n, m = map(int, input().split())
-info = []
+arr = [list(map(int, input().split())) for _ in range(n)]
+home = []
+chic = []
+for x in range(n):
+    for y in range(n):
+        if arr[x][y] == 1:
+            home.append((x+1, y+1))
+        if arr[x][y] == 2:
+            chic.append((x+1, y+1))
 
-for _ in range(n):
-    info.append(list(map(int, input().split())))
-
-homes, stores = get_homes_stores(info, n)
-
-canditates = list(combinations(stores, m))
-
-result = 1e9
-for canditate in canditates:
-    result = min(result, calc_chicken_distance(canditate))
-
-print(result)
+ans = n ** n
+for i in range(1, m+1):
+    for c in itertools.combinations(chic, i):
+        chic_street = 0
+        for h in home:
+            t = n ** n
+            for _c in c:
+                t = min(t, calc_distance(h[0], h[1], _c[0], _c[1]))
+            chic_street += t
+        ans = min(chic_street, ans)
+print(ans)

@@ -1,85 +1,38 @@
+dx = [0, 1, 0, -1]
+dy = [-1, 0, 1, 0]
 n, m = map(int, input().split())
-pos = list(map(int, input().split()))
-map_info = []
-visit = 1
-blocked = 0
-
-for i in range(n):
-    map_info.append(list(map(int, input().split())))
-
-map_info[pos[0]][pos[1]] = 2
+x, y, d = map(int, input().split())
+maps = [list(map(int, input().split())) for _ in range(m)]
+maps[x][y] = 2
+walk = 1
 
 while True:
-    if blocked == 4:
-        if pos[2] == 0:
-            if map_info[pos[0] + 1][pos[1]] == 1 or pos[0] + 1 >= n:
+    flag = 0
+    for i in range(d, 4+d):
+        j = i % 4
+        nx = x + dx[j]
+        ny = y + dy[j]
+        if 0 <= nx < m and 0 <= ny < n:
+            if maps[nx][ny] == 0:
+                maps[nx][ny] = 2
+                x, y = nx, ny
+                walk += 1
+                d = j + 1
+                flag = 1
                 break
-            else:
-                pos[0] += 1
-                blocked = 0
-        elif pos[2] == 1:
-            if map_info[pos[0]][pos[1] - 1] == 1 or pos[1] - 1 < 0:
-                break
-            else:
-                pos[1] -= 1
-                blocked = 0
-        elif pos[2] == 2:
-            if map_info[pos[0] - 1][pos[1]] == 1 or pos[0] - 1 < 0:
-                break
-            else:
-                pos[0] -= 1
-                blocked = 0
-        elif pos[2] == 3:
-            if map_info[pos[0]][pos[1] + 1] == 1 or pos[1] + 1 >= m:
-                break
-            else:
-                pos[1] += 1
-                blocked = 0
 
-    if pos[2] == 0:
-        pos[2] = 3
-    elif pos[2] == 1:
-        pos[2] = 0
-    elif pos[2] == 2:
-        pos[2] = 1
-    elif pos[2] == 3:
-        pos[2] = 2
-    
-    if pos[2] == 0:
-        if pos[0] - 1 >= 0 and map_info[pos[0] - 1][pos[1]] == 0:
-            pos[0] -= 1
-            map_info[pos[0]][pos[1]] = 2
-            visit += 1
-            blocked = 0
-        else:
-            blocked += 1
-    elif pos[2] == 1:
-        if pos[1] + 1 < m and map_info[pos[0]][pos[1] + 1] == 0:
-            pos[1] += 1
-            map_info[pos[0]][pos[1]] = 2
-            visit += 1
-            blocked = 0
-        else:
-            blocked += 1
-    elif pos[2] == 2:
-        if pos[0] + 1 < n and map_info[pos[0] + 1][pos[1]] == 0:
-            pos[0] += 1
-            map_info[pos[0]][pos[1]] = 2
-            visit += 1
-            blocked = 0
-        else:
-            blocked += 1
-    elif pos[2] == 3:
-        if pos[1] - 1 >= 0 and map_info[pos[0]][pos[1] - 1] == 0:
-            pos[1] -= 1
-            map_info[pos[0]][pos[1]] = 2
-            visit += 1
-            blocked = 0
-        else:
-            blocked += 1
-    print(pos)
-    print(map_info)
-    print(blocked)
+    if flag == 1:
+        continue
 
-print(visit)
-print(map_info)
+    d -= 1
+    d %= 4
+    nx = x - dx[d]
+    ny = y - dy[d]
+
+    if 0 <= nx < m and 0 <= ny < n:
+        if maps[nx][ny] == 2:
+            x, y = nx, ny
+            continue
+        elif maps[nx][ny] == 1:
+            break
+print(walk)
