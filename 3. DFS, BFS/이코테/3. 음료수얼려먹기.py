@@ -1,27 +1,22 @@
-n, m = map(int, input().split())
-frame = [[] for i in range(n)]
-
-for i in range(n):
-    for c in input():
-        frame[i].append(int(c))
-
+dx = [0, 1, 0, -1]
+dy = [-1, 0, 1, 0]
 def dfs(x, y):
-    if x <= -1 or x >= n or y <= -1 or y >= m:
-        return False
-    if frame[x][y] == 0:
-        frame[x][y] = 1
-        dfs(x-1, y)
-        dfs(x, y-1)
-        dfs(x+1, y)
-        dfs(x, y+1)
-        return True
-    return False
+    arr[x][y] = 1
+    for i in range(4):
+        nx = x + dx[i]
+        ny = y + dy[i]
+        if 0 <= nx < n and 0 <= ny < m:
+            if arr[nx][ny] == 0:
+                dfs(nx, ny)
 
-result = 0
-for i in range(n):
-    for j in range(m):
-        if dfs(i, j) == True:
-            print(frame)
-            result += 1
+n, m = map(int, input().split())
+arr = [list(map(int, list(input()))) for _ in range(n)]
+cnt = 0
 
-print(result)
+
+for x in range(n):
+    for y in range(m):
+        if arr[x][y] == 0:
+            dfs(x, y)
+            cnt += 1
+print(cnt)
